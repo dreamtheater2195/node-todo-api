@@ -1,24 +1,39 @@
 const { SHA256 } = require('crypto-js');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
-const message = 'I am user number 3';
-const hash = SHA256(message).toString();
+var password = '123abc!';
 
-console.log(`Message: ${message}`);
-console.log(`Hash: ${hash}`);
+bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(password, salt, (err, hash) => {
+        console.log(hash);
+    });
+});
 
-const data = {
-    id: 4
-};
+var hashedPassword = '$2a$10$kSa8ts5F76Hyzg8GxufW9Omb6BpOY75WZIDNQzAbBDLMxRUgCFSxa';
 
-const token = {
-    data,
-    hash = SHA256(JSON.stringify(data)).toString()
-}
+bcrypt.compare(password, hashedPassword, (err, res) => {
+    console.log(res);
+})
+// const message = 'I am user number 3';
+// const hash = SHA256(message).toString();
 
-const resultHash = SHA256(JSON.stringify(token.data) + 'somesecret').toString();
+// console.log(`Message: ${message}`);
+// console.log(`Hash: ${hash}`);
 
-if (resultHash === token.hash) {
-    console.log('Data was not changed');
-} else {
-    console.log('Data was changed. Do not trust');
-}
+// const data = {
+//     id: 4
+// };
+
+// const token = {
+//     data,
+//     hash = SHA256(JSON.stringify(data)).toString()
+// }
+
+// const resultHash = SHA256(JSON.stringify(token.data) + 'somesecret').toString();
+
+// if (resultHash === token.hash) {
+//     console.log('Data was not changed');
+// } else {
+//     console.log('Data was changed. Do not trust');
+// }
